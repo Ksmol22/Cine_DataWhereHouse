@@ -1,0 +1,17 @@
+# Dependencias del ETL — DataWhereHouse
+# Instalar con: pip install -r requirements.txt
+
+# Manipulación y análisis de datos
+pandas==2.2.2
+
+# Lectura de archivos Excel modernos (.xlsx)
+openpyxl==3.1.2
+
+# Lectura de archivos Excel legacy (.xls)
+xlrd==2.0.1
+
+# ORM y abstracción de base de datos (permite pandas.to_sql con SQL Server)
+SQLAlchemy==2.0.30
+
+# Driver ODBC para Python — necesario para conectar SQLAlchemy con SQL Server
+pyodbc==5.1.0
