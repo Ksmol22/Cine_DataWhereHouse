@@ -1,15 +1,3 @@
-"""
-=============================================================================
-MÓDULO: logger_config.py
-PROPÓSITO: Configuración centralizada del sistema de logging para el ETL.
-
-El logging es fundamental para auditar cada paso del proceso ETL:
-  - Registra cuándo inicia y termina cada fase (Extract, Transform, Load)
-  - Captura errores en detalle para facilitar el debugging
-  - Guarda un historial de ejecuciones en un archivo de texto (.log)
-  - Muestra mensajes en tiempo real en la consola
-=============================================================================
-"""
 
 import logging
 import os

@@ -1,21 +1,3 @@
-"""
-=============================================================================
-MÓDULO: config.py
-PROPÓSITO: Configuración centralizada del ETL.
-
-TODAS las variables configurables del proyecto viven aquí.
-Cambiar algo en este archivo afecta todo el pipeline sin tocar
-el código de la lógica de negocio. Esto es una buena práctica de
-ingeniería conocida como "Separation of Concerns".
-
-QUÉ CONFIGURA:
-  - Rutas de carpetas (Datasets, logs, archivos procesados)
-  - Credenciales y parámetros de conexión a SQL Server
-  - Comportamiento de la transformación (tipos de dato, columnas, etc.)
-  - Formatos de archivos soportados
-=============================================================================
-"""
-
 import os
 
 # =============================================================================

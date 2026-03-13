@@ -1,25 +1,3 @@
-"""
-=============================================================================
-MÓDULO: extractor.py
-CAPA:   E — Extract (Extracción)
-PROPÓSITO: Leer y cargar archivos desde la carpeta Datasets/ hacia DataFrames
-           de Pandas, que son la estructura de datos principal del pipeline ETL.
-
-RESPONSABILIDADES:
-  - Detectar automáticamente todos los archivos soportados en Datasets/
-  - Leer archivos CSV, Excel (.xlsx / .xls) y JSON
-  - Devolver cada archivo como un DataFrame de Pandas listo para transformar
-  - Registrar en el log cada archivo detectado y su resultado de lectura
-  - Mover archivos procesados a la subcarpeta "procesados/" para evitar
-    reprocesarlos en futuras ejecuciones
-
-FORMATOS SOPORTADOS:
-  - .csv  → separado por comas (detecta el délimitador automáticamente)
-  - .xlsx → Excel moderno (openpyxl)
-  - .xls  → Excel legacy (xlrd)
-  - .json → registros en formato lista de objetos o un objeto por línea
-=============================================================================
-"""
 
 import os
 import shutil

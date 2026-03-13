@@ -1,34 +1,3 @@
-"""
-=============================================================================
-MÓDULO: etl_pipeline.py
-PROPÓSITO: Orquestador principal del ETL — punto de entrada único.
-           Une las tres capas (Extract → Transform → Load) en un flujo
-           coherente y controlado.
-
-CÓMO EJECUTAR:
-    python etl_pipeline.py
-
-FLUJO COMPLETO:
-    ┌─────────────┐    ┌──────────────┐    ┌─────────────┐
-    │  EXTRACTOR  │ →  │ TRANSFORMER  │ →  │   LOADER    │
-    │             │    │              │    │             │
-    │ Lee archivos│    │ Limpia y     │    │ Inserta en  │
-    │ de Datasets/│    │ normaliza    │    │ SQL Server  │
-    │ CSV/XLSX/   │    │ los datos    │    │ como tablas │
-    │ JSON        │    │              │    │ stg_*       │
-    └─────────────┘    └──────────────┘    └─────────────┘
-           │                  │                   │
-           └──────────────────┴───────────────────┘
-                    Coordinado por etl_pipeline.py
-                    Registrado por logger_config.py
-
-TABLA DE ESTADOS DE SALIDA:
-    0 → Éxito completo
-    1 → Error crítico (conexión SQL, archivo corrupto, etc.)
-    2 → Ejecución parcial (algunos archivos fallaron, otros tuvieron éxito)
-=============================================================================
-"""
-
 import sys
 import time
 import traceback

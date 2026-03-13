@@ -1,27 +1,3 @@
-"""
-=============================================================================
-MÓDULO: transformer.py
-CAPA:   T — Transform (Transformación)
-PROPÓSITO: Limpiar, normalizar y enriquecer los DataFrames extraídos antes
-           de cargarlos en SQL Server.
-
-RESPONSABILIDADES:
-  - Normalizar nombres de columnas (sin espacios, sin acentos, en minúsculas)
-  - Eliminar filas y columnas completamente vacías
-  - Detectar y reportar valores nulos por columna
-  - Eliminar filas duplicadas
-  - Inferir y corregir tipos de dato (fechas, números, texto)
-  - Agregar columnas de auditoría (fecha de carga, nombre del archivo fuente)
-  - Limpiar strings (espacios extra, caracteres de control)
-
-POR QUÉ TRANSFORMAR ANTES DE CARGAR:
-  SQL Server es estricto con los tipos de datos. Si intentamos insertar
-  strings donde espera fechas, o valores nulos donde hay NOT NULL,
-  el insert fallará. La capa de transformación garantiza que los datos
-  sean compatibles con el esquema destino.
-=============================================================================
-"""
-
 import re
 import logging
 import unicodedata

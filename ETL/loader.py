@@ -1,27 +1,3 @@
-"""
-=============================================================================
-MÓDULO: loader.py
-CAPA:   L — Load (Carga)
-PROPÓSITO: Establecer la conexión con SQL Server y cargar los DataFrames
-           transformados como tablas en la base de datos destino.
-
-RESPONSABILIDADES:
-  - Construir el connection string para SQL Server usando pyodbc + SQLAlchemy
-  - Verificar la conexión antes de intentar cargar datos
-  - Crear o actualizar tablas en SQL Server con los datos del DataFrame
-  - Manejar errores de conexión e inserción con mensajes claros
-  - Registrar en el log el resultado de cada carga (filas insertadas, tabla, tiempo)
-
-POR QUÉ SQLAlchemy + PYODBC:
-  - pyodbc es el driver de bajo nivel que habla con ODBC de Windows
-  - SQLAlchemy es la capa de abstracción que permite usar pandas.to_sql()
-    con cualquier base de datos relacional (SQL Server, PostgreSQL, etc.)
-  - Esta combinación es el estándar de la industria para ETL en Python
-
-DIAGRAMA DE FLUJO DE DATOS:
-  DataFrame → SQLAlchemy Engine → ODBC Driver → SQL Server → Tabla SQL
-=============================================================================
-"""
 
 import logging
 import time
