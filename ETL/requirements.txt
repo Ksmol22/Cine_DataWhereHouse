@@ -10,8 +10,8 @@ openpyxl==3.1.2
 # Lectura de archivos Excel legacy (.xls)
 xlrd==2.0.1
 
-# ORM y abstracción de base de datos (permite pandas.to_sql con SQL Server)
-SQLAlchemy==2.0.30
+# ORM y abstracción de base de datos (permite pandas.to_sql con MySQL)
+SQLAlchemy>=2.0.36
 
-# Driver ODBC para Python — necesario para conectar SQLAlchemy con SQL Server
-pyodbc==5.1.0
+# Driver nativo de MySQL para Python — necesario para conectar SQLAlchemy con MySQL
+mysql-connector-python==8.4.0

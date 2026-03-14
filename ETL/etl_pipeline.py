@@ -122,13 +122,13 @@ def ejecutar_etl() -> int:
         # Error crítico: no se pudo conectar a SQL Server.
         # No tiene sentido continuar si no hay base de datos disponible.
         logger.critical(
-            f"ERROR CRÍTICO DE CONEXIÓN: No se pudo establecer conexión con SQL Server.\n"
+            f"ERROR CRÍTICO DE CONEXIÓN: No se pudo establecer conexión con MySQL.\n"
             f"Detalle: {error_conexion}\n\n"
             f"SOLUCIÓN: Verifica en config.py:\n"
-            f"  - SQL_SERVER_CONFIG['SERVER'] → nombre del servidor\n"
-            f"  - SQL_SERVER_CONFIG['DATABASE'] → base de datos destino\n"
-            f"  - SQL_SERVER_CONFIG['DRIVER'] → driver ODBC instalado\n"
-            f"  - SQL_SERVER_CONFIG['USAR_WINDOWS_AUTH'] → tipo de autenticación"
+            f"  - MYSQL_CONFIG['HOST'] → IP del servidor\n"
+            f"  - MYSQL_CONFIG['PORT'] → puerto (por defecto 3306)\n"
+            f"  - MYSQL_CONFIG['DATABASE'] → base de datos destino\n"
+            f"  - MYSQL_CONFIG['USER'] / MYSQL_CONFIG['PASSWORD'] → credenciales"
         )
         _imprimir_resumen(logger, inicio_pipeline, archivos_procesados, archivos_fallidos, total_filas_cargadas)
         return 1

@@ -22,39 +22,24 @@ EXTENSIONES_SOPORTADAS = [".csv", ".xlsx", ".xls", ".json"]
 
 
 # =============================================================================
-# SECCIÓN 2: CONFIGURACIÓN DE CONEXIÓN A SQL SERVER
-#
-# INSTRUCCIONES PARA COMPLETAR:
-#   - SERVER:   Nombre del servidor o instancia de SQL Server.
-#               Si es local Community Edition, suele ser: LOCALHOST o NOMBRE_PC\SQLEXPRESS
-#               Ejemplo: "DESKTOP-ABC123\SQLEXPRESS" o simplemente "localhost"
-#   - DATABASE: Nombre de la base de datos destino (debe existir en SQL Server).
-#   - Autenticación: Se usa Windows Authentication por defecto (recomendado
-#               para SQL Server Community local). Si usas usuario/contraseña SQL,
-#               cambia USAR_WINDOWS_AUTH a False y completa SQL_USER y SQL_PASSWORD.
+# SECCIÓN 2: CONFIGURACIÓN DE CONEXIÓN A MYSQL
 # =============================================================================
 
-SQL_SERVER_CONFIG = {
-    # Nombre del servidor/instancia de SQL Server
-    # Ejemplos: "localhost", "MIPC\\SQLEXPRESS", "192.168.1.100"
-    "SERVER": "localhost",
+MYSQL_CONFIG = {
+    # IP o nombre del host donde corre MySQL
+    "HOST": "127.0.0.1",
 
-    # Nombre de la base de datos donde se cargarán los datos
-    "DATABASE": "DataWhereHouse",
+    # Puerto de MySQL (por defecto 3306)
+    "PORT": 3306,
 
-    # Driver ODBC instalado en el sistema.
-    # Para verificar cuál tienes, ejecuta en PowerShell:
-    #   Get-OdbcDriver | Select-Object Name | Where-Object {$_.Name -like "*SQL*"}
-    # Opciones comunes: "ODBC Driver 17 for SQL Server" / "ODBC Driver 18 for SQL Server"
-    "DRIVER": "ODBC Driver 17 for SQL Server",
+    # Nombre de la base de datos destino
+    "DATABASE": "cine",
 
-    # True = usa Autenticación de Windows (recomendado para instalaciones locales)
-    # False = usa usuario y contraseña SQL Server
-    "USAR_WINDOWS_AUTH": True,
+    # Usuario de MySQL
+    "USER": "root",
 
-    # Solo se usan si USAR_WINDOWS_AUTH = False
-    "SQL_USER": "",
-    "SQL_PASSWORD": "",
+    # Contraseña de MySQL
+    "PASSWORD": "123456asdfg**",
 
     # Tiempo máximo de espera para establecer la conexión (segundos)
     "TIMEOUT_CONEXION": 30,
@@ -66,7 +51,7 @@ SQL_SERVER_CONFIG = {
 # =============================================================================
 
 LOADER_CONFIG = {
-    # Modo de carga al insertar datos en SQL Server.
+    # Modo de carga al insertar datos en MySQL.
     # Opciones:
     #   "append"  → Agrega filas a la tabla existente (sin borrar datos previos)
     #   "replace" → Borra la tabla y la recrea con los nuevos datos

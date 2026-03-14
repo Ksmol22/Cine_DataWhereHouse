@@ -1,0 +1,66 @@
+[2026-03-13 22:00:52] [INFO] [ETL_Pipeline] Logger inicializado. Archivo de log: C:\Users\kmolina\Documents\DataWhereHouse\ETL\logs\ETL_2026-03-13_22-00-52.log
+[2026-03-13 22:00:52] [INFO] [ETL_Pipeline] ======================================================================
+[2026-03-13 22:00:52] [INFO] [ETL_Pipeline]   INICIANDO PIPELINE ETL — DataWhereHouse
+[2026-03-13 22:00:52] [INFO] [ETL_Pipeline]   Fecha/Hora: 2026-03-13 22:00:52
+[2026-03-13 22:00:52] [INFO] [ETL_Pipeline] ======================================================================
+[2026-03-13 22:00:52] [DEBUG] [ETL_Pipeline] Directorio de datasets: C:\Users\kmolina\Documents\DataWhereHouse\Datasets
+[2026-03-13 22:00:52] [DEBUG] [ETL_Pipeline] Directorio de procesados: C:\Users\kmolina\Documents\DataWhereHouse\Datasets\procesados
+[2026-03-13 22:00:52] [INFO] [ETL_Pipeline] Conectando a MySQL...
+[2026-03-13 22:00:52] [DEBUG] [ETL_Pipeline]   Host: 127.0.0.1:3306 | Base de datos: cine | Usuario: root
+[2026-03-13 22:00:52] [DEBUG] [ETL_Pipeline]   Connection string (sin credenciales): Host=127.0.0.1:3306 | DB=cine | User=root | Password=***
+[2026-03-13 22:00:52] [INFO] [ETL_Pipeline] Conexión exitosa a MySQL: [127.0.0.1:3306] → [cine]
+[2026-03-13 22:00:52] [DEBUG] [ETL_Pipeline]   Detectado: dataset_limpio_50k_nl.xlsx
+[2026-03-13 22:00:52] [DEBUG] [ETL_Pipeline]   Detectado: dataset_sucio_20k_nl.xlsx
+[2026-03-13 22:00:52] [INFO] [ETL_Pipeline] Archivos a procesar: 2
+[2026-03-13 22:00:52] [INFO] [ETL_Pipeline] Extrayendo: dataset_limpio_50k_nl.xlsx
+[2026-03-13 22:01:01] [INFO] [ETL_Pipeline]   Extraído correctamente | Filas: 50,000 | Columnas: 21 | Tabla destino: 'dataset_limpio_50k_nl'
+[2026-03-13 22:01:01] [DEBUG] [ETL_Pipeline]   Columnas detectadas: ['id_fact', 'titulo_pelicula', 'genero', 'clasificacion', 'duracion_minutos', 'fecha_estreno_pelicula', 'nombre_teatro', 'ciudad', 'zona', 'numero_sala', 'capacidad_sala', 'tipo_sala', 'fecha_funcion', 'ano', 'mes', 'dia_semana', 'es_fin_semana', 'trimestre', 'boletos_vendidos', 'precio_boleto_cop', 'ingreso_total_cop']
+[2026-03-13 22:01:01] [INFO] [ETL_Pipeline] ------------------------------------------------------------
+[2026-03-13 22:01:01] [INFO] [ETL_Pipeline]   PROCESANDO: dataset_limpio_50k_nl
+[2026-03-13 22:01:01] [INFO] [ETL_Pipeline] ------------------------------------------------------------
+[2026-03-13 22:01:01] [INFO] [ETL_Pipeline] Iniciando transformación para: 'dataset_limpio_50k_nl'
+[2026-03-13 22:01:01] [DEBUG] [ETL_Pipeline]   Columnas normalizadas: ['id_fact', 'titulo_pelicula', 'genero', 'clasificacion', 'duracion_minutos', 'fecha_estreno_pelicula', 'nombre_teatro', 'ciudad', 'zona', 'numero_sala', 'capacidad_sala', 'tipo_sala', 'fecha_funcion', 'ano', 'mes', 'dia_semana', 'es_fin_semana', 'trimestre', 'boletos_vendidos', 'precio_boleto_cop', 'ingreso_total_cop']
+[2026-03-13 22:01:02] [DEBUG] [ETL_Pipeline]   Columna 'fecha_estreno_pelicula' convertida a datetime.
+[2026-03-13 22:01:02] [DEBUG] [ETL_Pipeline]   Columna 'fecha_funcion' convertida a datetime.
+[2026-03-13 22:01:02] [INFO] [ETL_Pipeline]   Sin valores nulos detectados en 'dataset_limpio_50k_nl'.
+[2026-03-13 22:01:02] [DEBUG] [ETL_Pipeline]   Columnas de auditoría agregadas (etl_fecha_carga, etl_archivo_fuente).
+[2026-03-13 22:01:02] [INFO] [ETL_Pipeline] Transformación completada para 'dataset_limpio_50k_nl' | Filas entrada: 50,000 | Filas salida: 50,000 | Filas eliminadas: 0
+[2026-03-13 22:01:02] [INFO] [ETL_Pipeline] Cargando tabla 'stg_dataset_limpio_50k_nl' | Filas: 50,000 | Modo: append
+[2026-03-13 22:01:17] [INFO] [ETL_Pipeline] Carga exitosa → [cine].[stg_dataset_limpio_50k_nl] | Filas insertadas: 50,000 | Tiempo: 15.22s
+[2026-03-13 22:01:17] [DEBUG] [ETL_Pipeline]   Movido a procesados/: dataset_limpio_50k_nl.xlsx
+[2026-03-13 22:01:17] [INFO] [ETL_Pipeline] Extrayendo: dataset_sucio_20k_nl.xlsx
+[2026-03-13 22:01:21] [INFO] [ETL_Pipeline]   Extraído correctamente | Filas: 20,000 | Columnas: 21 | Tabla destino: 'dataset_sucio_20k_nl'
+[2026-03-13 22:01:21] [DEBUG] [ETL_Pipeline]   Columnas detectadas: ['id_fact', 'titulo_pelicula', 'genero', 'clasificacion', 'duracion_minutos', 'fecha_estreno_pelicula', 'nombre_teatro', 'ciudad', 'zona', 'numero_sala', 'capacidad_sala', 'tipo_sala', 'fecha_funcion', 'ano', 'mes', 'dia_semana', 'es_fin_semana', 'trimestre', 'boletos_vendidos', 'precio_boleto_cop', 'ingreso_total_cop']
+[2026-03-13 22:01:21] [INFO] [ETL_Pipeline] ------------------------------------------------------------
+[2026-03-13 22:01:21] [INFO] [ETL_Pipeline]   PROCESANDO: dataset_sucio_20k_nl
+[2026-03-13 22:01:21] [INFO] [ETL_Pipeline] ------------------------------------------------------------
+[2026-03-13 22:01:21] [INFO] [ETL_Pipeline] Iniciando transformación para: 'dataset_sucio_20k_nl'
+[2026-03-13 22:01:21] [DEBUG] [ETL_Pipeline]   Columnas normalizadas: ['id_fact', 'titulo_pelicula', 'genero', 'clasificacion', 'duracion_minutos', 'fecha_estreno_pelicula', 'nombre_teatro', 'ciudad', 'zona', 'numero_sala', 'capacidad_sala', 'tipo_sala', 'fecha_funcion', 'ano', 'mes', 'dia_semana', 'es_fin_semana', 'trimestre', 'boletos_vendidos', 'precio_boleto_cop', 'ingreso_total_cop']
+[2026-03-13 22:01:21] [DEBUG] [ETL_Pipeline]   Filas completamente vacías eliminadas: 991
+[2026-03-13 22:01:21] [DEBUG] [ETL_Pipeline]   Columna 'fecha_estreno_pelicula' convertida a datetime.
+[2026-03-13 22:01:21] [DEBUG] [ETL_Pipeline]   Columna 'fecha_funcion' convertida a datetime.
+[2026-03-13 22:01:21] [DEBUG] [ETL_Pipeline]   Columna 'precio_boleto_cop' convertida a numérico.
+[2026-03-13 22:01:21] [WARNING] [ETL_Pipeline]   Reporte de nulos en 'dataset_sucio_20k_nl':
+[2026-03-13 22:01:21] [WARNING] [ETL_Pipeline]     - titulo_pelicula: 999 nulos (5.3%)
+[2026-03-13 22:01:21] [WARNING] [ETL_Pipeline]     - genero: 950 nulos (5.0%)
+[2026-03-13 22:01:21] [WARNING] [ETL_Pipeline]     - clasificacion: 950 nulos (5.0%)
+[2026-03-13 22:01:21] [WARNING] [ETL_Pipeline]     - ciudad: 947 nulos (5.0%)
+[2026-03-13 22:01:21] [WARNING] [ETL_Pipeline]     - numero_sala: 1,006 nulos (5.3%)
+[2026-03-13 22:01:21] [WARNING] [ETL_Pipeline]     - capacidad_sala: 1,006 nulos (5.3%)
+[2026-03-13 22:01:21] [WARNING] [ETL_Pipeline]     - fecha_funcion: 2,064 nulos (10.9%)
+[2026-03-13 22:01:21] [WARNING] [ETL_Pipeline]     - precio_boleto_cop: 933 nulos (4.9%)
+[2026-03-13 22:01:21] [WARNING] [ETL_Pipeline]     - ingreso_total_cop: 1,060 nulos (5.6%)
+[2026-03-13 22:01:21] [DEBUG] [ETL_Pipeline]   Columnas de auditoría agregadas (etl_fecha_carga, etl_archivo_fuente).
+[2026-03-13 22:01:21] [INFO] [ETL_Pipeline] Transformación completada para 'dataset_sucio_20k_nl' | Filas entrada: 20,000 | Filas salida: 19,009 | Filas eliminadas: 991
+[2026-03-13 22:01:21] [INFO] [ETL_Pipeline] Cargando tabla 'stg_dataset_sucio_20k_nl' | Filas: 19,009 | Modo: append
+[2026-03-13 22:01:27] [INFO] [ETL_Pipeline] Carga exitosa → [cine].[stg_dataset_sucio_20k_nl] | Filas insertadas: 19,009 | Tiempo: 5.27s
+[2026-03-13 22:01:27] [DEBUG] [ETL_Pipeline]   Movido a procesados/: dataset_sucio_20k_nl.xlsx
+[2026-03-13 22:01:27] [INFO] [ETL_Pipeline] Conexión a MySQL cerrada correctamente.
+[2026-03-13 22:01:27] [INFO] [ETL_Pipeline] ======================================================================
+[2026-03-13 22:01:27] [INFO] [ETL_Pipeline]   RESUMEN FINAL — PIPELINE ETL
+[2026-03-13 22:01:27] [INFO] [ETL_Pipeline] ======================================================================
+[2026-03-13 22:01:27] [INFO] [ETL_Pipeline]   Archivos procesados exitosamente : 2
+[2026-03-13 22:01:27] [INFO] [ETL_Pipeline]   Archivos con errores             : 0
+[2026-03-13 22:01:27] [INFO] [ETL_Pipeline]   Total filas cargadas en SQL Server: 69,009
+[2026-03-13 22:01:27] [INFO] [ETL_Pipeline]   Duración total                   : 0m 35.00s
+[2026-03-13 22:01:27] [INFO] [ETL_Pipeline] ======================================================================
