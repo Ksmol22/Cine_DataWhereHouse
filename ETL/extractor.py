@@ -37,7 +37,7 @@ class Extractor:
     # MÉTODO PRINCIPAL: detectar y recorrer todos los archivos soportados
     # -------------------------------------------------------------------------
 
-    def extraer_todos(self) -> Generator[Tuple[str, pd.DataFrame], None, None]:
+    def extraer_todos(self) -> Generator[Tuple[str, pd.DataFrame, str, str], None, None]:
         """
         Generador que itera sobre todos los archivos válidos en Datasets/,
         los lee como DataFrames y los va devolviendo uno a uno.
@@ -46,9 +46,11 @@ class Extractor:
         memoria: solo carga un archivo a la vez en lugar de todos a la vez.
 
         Yields:
-            Tuple[str, pd.DataFrame]:
+            Tuple[str, pd.DataFrame, str, str]:
                 - str: nombre de la tabla destino (nombre del archivo sin extensión)
                 - pd.DataFrame: datos del archivo listos para transformar
+                - str: ruta absoluta del archivo de origen
+                - str: nombre del archivo de origen
 
         Example:
             for tabla, df in extractor.extraer_todos():
@@ -98,15 +100,7 @@ class Extractor:
                 # ---------------------------------------------------------
                 # PASO 4: Ceder el DataFrame al caller (orquestador)
                 # ---------------------------------------------------------
-                yield nombre_tabla, df
-
-                # ---------------------------------------------------------
-                # PASO 5: Mover el archivo a la carpeta "procesados/"
-                # Se hace DESPUÉS de cederlo al caller, para que si falla
-                # el transform/load, el archivo no se mueva.
-                # (El movimiento definitivo ocurre al finalizar el pipeline.)
-                # ---------------------------------------------------------
-                self._mover_a_procesados(ruta_archivo, nombre_archivo)
+                yield nombre_tabla, df, ruta_archivo, nombre_archivo
 
             except Exception as error:
                 # Si un archivo falla, se registra el error y se continúa
@@ -228,3 +222,10 @@ class Extractor:
         ruta_destino = os.path.join(DIRECTORIO_PROCESADOS, nombre_archivo)
         shutil.move(ruta_origen, ruta_destino)
         self.logger.debug(f"  Movido a procesados/: {nombre_archivo}")
+
+    def marcar_como_procesado(self, ruta_origen: str, nombre_archivo: str) -> None:
+        """
+        Marca un archivo como procesado moviéndolo a 'procesados/'.
+        Debe llamarse solo después de completar transformación y carga con éxito.
+        """
+        self._mover_a_procesados(ruta_origen, nombre_archivo)

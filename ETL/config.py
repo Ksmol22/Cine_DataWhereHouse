@@ -79,8 +79,11 @@ LOADER_CONFIG = {
 
 TRANSFORM_CONFIG = {
     # Si True, se eliminan filas donde TODOS los valores son nulos.
-    "ELIMINAR_FILAS_COMPLETAMENTE_NULAS": True,
+        "ELIMINAR_FILAS_COMPLETAMENTE_NULAS": False,
 
+        # Si True, se eliminan filas duplicadas exactas.
+        # Para no descartar información histórica se recomienda False.
+        "ELIMINAR_FILAS_DUPLICADAS": False,
     # Si True, se eliminan columnas duplicadas (mismo nombre de columna).
     "ELIMINAR_COLUMNAS_DUPLICADAS": True,
 

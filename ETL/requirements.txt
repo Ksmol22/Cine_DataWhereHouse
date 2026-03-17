@@ -5,7 +5,7 @@
 pandas==2.2.2
 
 # Lectura de archivos Excel modernos (.xlsx)
-openpyxl==3.1.2
+openpyxl>=3.1.5
 
 # Lectura de archivos Excel legacy (.xls)
 xlrd==2.0.1

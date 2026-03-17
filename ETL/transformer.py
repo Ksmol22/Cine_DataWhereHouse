@@ -7,6 +7,14 @@ from datetime import datetime
 from config import TRANSFORM_CONFIG
 
 
+MAPA_TIPO_SALA = {
+    "2d": "2D",
+    "3d": "3D",
+    "vip": "VIP",
+    "xd": "XD",
+}
+
+
 class Transformer:
     """
     Clase responsable de la fase de TRANSFORMACIÓN del ETL.
@@ -71,10 +79,11 @@ class Transformer:
             df = self._eliminar_filas_vacias(df)
 
         # -----------------------------------------------------------------
-        # TRANSFORMACIÓN 4: Eliminar filas duplicadas exactas
-        # Dos filas idénticas en todos sus valores se reducen a una sola.
+        # TRANSFORMACIÓN 4: Eliminar filas duplicadas exactas (opcional)
+        # Para cargas históricas acumulativas puede desactivarse desde config.py.
         # -----------------------------------------------------------------
-        df = self._eliminar_duplicados(df)
+        if TRANSFORM_CONFIG.get("ELIMINAR_FILAS_DUPLICADAS", False):
+            df = self._eliminar_duplicados(df)
 
         # -----------------------------------------------------------------
         # TRANSFORMACIÓN 5: Limpiar valores de texto (strings)
@@ -89,6 +98,21 @@ class Transformer:
         # automáticamente columnas numéricas y de fecha al tipo correcto.
         # -----------------------------------------------------------------
         df = self._inferir_tipos(df)
+
+        # -----------------------------------------------------------------
+        # TRANSFORMACIÓN 6.0: Optimizar tipos numéricos
+        # Convierte floats enteros a Int64 y bool a enteros pequeños para
+        # acelerar joins/agregaciones y reducir memoria en carga.
+        # -----------------------------------------------------------------
+        df = self._optimizar_tipos_numericos(df)
+
+        # -----------------------------------------------------------------
+        # TRANSFORMACIÓN 6.1: Reglas de negocio del DW de cine
+        # - Derivar id_fecha (YYYYMMDD) si existe una columna de fecha
+        # - Normalizar catálogo de tipo de sala (2D/3D/VIP/XD)
+        # - Remover columnas generadas en MySQL como ingreso_total
+        # -----------------------------------------------------------------
+        df = self._aplicar_reglas_dw_cine(df)
 
         # -----------------------------------------------------------------
         # TRANSFORMACIÓN 7: Reportar valores nulos por columna
@@ -286,6 +310,60 @@ class Transformer:
             for col, cantidad in columnas_con_nulos.items():
                 porcentaje = (cantidad / len(df)) * 100
                 self.logger.warning(f"    - {col}: {cantidad:,} nulos ({porcentaje:.1f}%)")
+
+    def _optimizar_tipos_numericos(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Ajusta tipos para priorizar columnas numéricas cuando sea seguro:
+          - bool -> Int8
+          - float con valores enteros -> Int64 nullable
+        """
+        for col in df.columns:
+            serie = df[col]
+
+            if pd.api.types.is_bool_dtype(serie):
+                df[col] = serie.astype("Int8")
+                continue
+
+            if pd.api.types.is_float_dtype(serie):
+                sin_nulos = serie.dropna()
+                if not sin_nulos.empty and (sin_nulos % 1 == 0).all():
+                    df[col] = pd.to_numeric(serie, errors="coerce").astype("Int64")
+
+        return df
+
+    def _aplicar_reglas_dw_cine(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Aplica reglas específicas del modelo DW de cine sin acoplar el pipeline
+        a una tabla particular.
+        """
+        # Derivar id_fecha en formato YYYYMMDD si hay columna fecha y no existe id_fecha.
+        if "id_fecha" not in df.columns and "fecha" in df.columns:
+            serie_fecha = pd.to_datetime(df["fecha"], errors="coerce", dayfirst=True)
+            if serie_fecha.notna().any():
+                df["id_fecha"] = serie_fecha.dt.strftime("%Y%m%d")
+                df.loc[serie_fecha.isna(), "id_fecha"] = pd.NA
+                df["id_fecha"] = pd.to_numeric(df["id_fecha"], errors="coerce").astype("Int64")
+                self.logger.debug("  Regla DW: columna 'id_fecha' derivada desde 'fecha'.")
+
+        # Normalizar catálogo de tipos de sala para cumplir el CHECK de DIM_TIPO_SALA.
+        if "tipo" in df.columns:
+            original_nulos = df["tipo"].isna()
+            normalizado = (
+                df["tipo"]
+                .astype(str)
+                .str.strip()
+                .str.lower()
+                .map(MAPA_TIPO_SALA)
+            )
+            df["tipo"] = normalizado.where(~original_nulos, pd.NA)
+            self.logger.debug("  Regla DW: catálogo 'tipo' normalizado a valores permitidos.")
+
+        # 'ingreso_total' es GENERATED ALWAYS en MySQL: no debe insertarse.
+        if "ingreso_total" in df.columns:
+            df = df.drop(columns=["ingreso_total"], errors="ignore")
+            self.logger.debug("  Regla DW: columna 'ingreso_total' removida antes de carga.")
+
+        return df
 
     def _agregar_columnas_auditoria(
         self, df: pd.DataFrame, nombre_tabla: str

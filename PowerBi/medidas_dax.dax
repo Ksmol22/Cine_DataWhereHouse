@@ -1,0 +1,402 @@
+// =============================================================================
+// MEDIDAS DAX — DataWhereHouse · Analítica de Aforo en Cine (Colombia)
+// =============================================================================
+// INSTRUCCIONES DE USO EN POWER BI:
+//   1. Conectar a MySQL: Inicio → Obtener datos → MySQL
+//      Host: 127.0.0.1  Puerto: 3306  BD: cine
+//   2. Importar tablas: FACT_VENTAS_BOLETOS, DIM_FECHA, DIM_TEATRO,
+//      DIM_SALA, DIM_TIPO_SALA, DIM_PELICULA
+//   3. Verificar relaciones en la vista Modelo:
+//      FACT[id_fecha]     → DIM_FECHA[id_fecha]
+//      FACT[id_teatro]    → DIM_TEATRO[id_teatro]
+//      FACT[id_sala]      → DIM_SALA[id_sala]
+//      FACT[id_tipo_sala] → DIM_TIPO_SALA[id_tipo_sala]
+//      FACT[id_pelicula]  → DIM_PELICULA[id_pelicula]
+//   4. En la tabla FACT_VENTAS_BOLETOS crear cada medida con
+//      "Nueva medida" y pegar el bloque DAX correspondiente.
+//   5. Marcar DIM_FECHA como "Tabla de fechas" usando la columna [fecha].
+// =============================================================================
+
+
+// =============================================================================
+// MEDIDAS BASE  (usadas internamente por los KPIs)
+// =============================================================================
+
+Total Boletos Vendidos =
+SUM(FACT_VENTAS_BOLETOS[boletos_vendidos])
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+Ingresos Totales =
+SUM(FACT_VENTAS_BOLETOS[ingreso_total])
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+Numero de Funciones =
+COUNTROWS(FACT_VENTAS_BOLETOS)
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+Capacidad Total =
+SUMX(
+    FACT_VENTAS_BOLETOS,
+    RELATED(DIM_SALA[capacidad])
+)
+
+
+// =============================================================================
+// KPI 1 — Tasa de Ocupación de Salas
+// Fórmula : (Boletos vendidos / Capacidad sala) × 100
+// Meta    : ≥ 70 %
+// Asignado: Gerente de operaciones
+// =============================================================================
+
+KPI1 Tasa Ocupacion % =
+DIVIDE(
+    [Total Boletos Vendidos],
+    [Capacidad Total],
+    0
+) * 100
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI1 Estado =
+IF(
+    [KPI1 Tasa Ocupacion %] >= 70,
+    "✅ Meta cumplida",
+    "⚠️ Bajo meta"
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Semáforo de color para formato condicional (devuelve código HEX)
+
+KPI1 Color =
+SWITCH(
+    TRUE(),
+    [KPI1 Tasa Ocupacion %] >= 70, "#27AE60",   // Verde  — meta cumplida
+    [KPI1 Tasa Ocupacion %] >= 55, "#F39C12",   // Naranja — cerca de meta
+    "#E74C3C"                                    // Rojo  — crítico
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// % de cumplimiento respecto a la meta (70 %)
+
+KPI1 Cumplimiento % =
+DIVIDE([KPI1 Tasa Ocupacion %], 70, 0) * 100
+
+
+// =============================================================================
+// KPI 2 — Ingresos por Función
+// Fórmula : Ingreso Total / Número de funciones
+// Meta    : Crecer ≥ 15 % anual
+// Asignado: Director financiero
+// =============================================================================
+
+KPI2 Ingreso por Funcion =
+DIVIDE(
+    [Ingresos Totales],
+    [Numero de Funciones],
+    0
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI2 Ingresos Año Anterior =
+CALCULATE(
+    [Ingresos Totales],
+    DATEADD(DIM_FECHA[fecha], -1, YEAR)
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI2 Crecimiento Anual % =
+DIVIDE(
+    [Ingresos Totales] - [KPI2 Ingresos Año Anterior],
+    [KPI2 Ingresos Año Anterior],
+    0
+) * 100
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI2 Estado =
+IF(
+    [KPI2 Crecimiento Anual %] >= 15,
+    "✅ Meta cumplida (+15%)",
+    "⚠️ Crecimiento insuficiente"
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI2 Color =
+SWITCH(
+    TRUE(),
+    [KPI2 Crecimiento Anual %] >= 15, "#27AE60",
+    [KPI2 Crecimiento Anual %] >= 0,  "#F39C12",
+    "#E74C3C"
+)
+
+
+// =============================================================================
+// KPI 3 — Películas Más Vistas
+// Fórmula : Σ Boletos vendidos por película
+// Meta    : > 70 % del aforo disponible × funciones
+// Asignado: Gerente de programación
+// =============================================================================
+
+KPI3 Boletos por Pelicula =
+SUM(FACT_VENTAS_BOLETOS[boletos_vendidos])
+// → Usar este valor en un visual de Barras agrupado por DIM_PELICULA[titulo]
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI3 Aforo Meta Pelicula =
+[Capacidad Total] * 0.70
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI3 Ocupacion Pelicula % =
+DIVIDE(
+    [Total Boletos Vendidos],
+    [Capacidad Total],
+    0
+) * 100
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI3 Estado =
+IF(
+    [KPI3 Ocupacion Pelicula %] >= 70,
+    "✅ Alta demanda",
+    "⚠️ Demanda insuficiente"
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Ranking de películas por boletos (útil para TOP N visual)
+
+KPI3 Ranking Pelicula =
+RANKX(
+    ALL(DIM_PELICULA[titulo]),
+    [Total Boletos Vendidos],
+    ,
+    DESC,
+    DENSE
+)
+
+
+// =============================================================================
+// KPI 4 — Aforo Promedio por Día de la Semana
+// Nota    : El dataset no tiene campo hora; se usa dia_semana como agrupador.
+// Fórmula : Total asistentes / Número de funciones  por día de semana
+// Meta    : Días con ocupación ≥ 75 %
+// Asignado: Gerente de operaciones
+// =============================================================================
+
+KPI4 Aforo Promedio por Dia =
+AVERAGEX(
+    VALUES(DIM_FECHA[dia_semana]),
+    CALCULATE([Total Boletos Vendidos])
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI4 Tasa Ocupacion por Dia % =
+DIVIDE(
+    AVERAGEX(
+        VALUES(DIM_FECHA[dia_semana]),
+        CALCULATE([Total Boletos Vendidos])
+    ),
+    AVERAGEX(
+        VALUES(DIM_FECHA[dia_semana]),
+        CALCULATE([Capacidad Total])
+    ),
+    0
+) * 100
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI4 Clasificacion Dia =
+IF(
+    [KPI4 Tasa Ocupacion por Dia %] >= 75,
+    "📈 Horario pico",
+    "📉 Horario bajo"
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI4 Color =
+SWITCH(
+    TRUE(),
+    [KPI4 Tasa Ocupacion por Dia %] >= 75, "#27AE60",
+    [KPI4 Tasa Ocupacion por Dia %] >= 55, "#F39C12",
+    "#E74C3C"
+)
+
+
+// =============================================================================
+// KPI 5 — Rentabilidad por Tipo de Sala
+// Fórmula : Total ingresos tipo sala / Número de funciones
+// Meta    : Salas premium (VIP/XD) > 40 % del ingreso total
+// Asignado: Director de operaciones
+// =============================================================================
+
+KPI5 Rentabilidad por Tipo Sala =
+DIVIDE(
+    [Ingresos Totales],
+    [Numero de Funciones],
+    0
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI5 Ingresos Salas Premium =
+CALCULATE(
+    [Ingresos Totales],
+    DIM_TIPO_SALA[tipo] IN { "VIP", "XD" }
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI5 Ingresos Salas Estandar =
+CALCULATE(
+    [Ingresos Totales],
+    DIM_TIPO_SALA[tipo] IN { "2D", "3D" }
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI5 % Ingresos Premium =
+DIVIDE(
+    [KPI5 Ingresos Salas Premium],
+    [Ingresos Totales],
+    0
+) * 100
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI5 Estado =
+IF(
+    [KPI5 % Ingresos Premium] >= 40,
+    "✅ Salas premium superaron meta",
+    "⚠️ Salas premium bajo meta 40%"
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI5 Color =
+IF(
+    [KPI5 % Ingresos Premium] >= 40,
+    "#27AE60",
+    "#E74C3C"
+)
+
+
+// =============================================================================
+// KPI 6 — Demanda por Ciudad
+// Fórmula : Σ Boletos vendidos por ciudad
+// Meta    : Ciudades con crecimiento ≥ 10 % anual
+// Asignado: Director comercial
+// =============================================================================
+
+KPI6 Demanda Ciudad =
+SUM(FACT_VENTAS_BOLETOS[boletos_vendidos])
+// → Usar en visual de Mapa o Barras agrupado por DIM_TEATRO[ciudad]
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI6 Boletos Año Anterior =
+CALCULATE(
+    [Total Boletos Vendidos],
+    DATEADD(DIM_FECHA[fecha], -1, YEAR)
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI6 Crecimiento Ciudad % =
+DIVIDE(
+    [Total Boletos Vendidos] - [KPI6 Boletos Año Anterior],
+    [KPI6 Boletos Año Anterior],
+    0
+) * 100
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI6 Estado =
+IF(
+    [KPI6 Crecimiento Ciudad %] >= 10,
+    "✅ Ciudad en crecimiento",
+    "⚠️ Crecimiento bajo meta"
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+KPI6 Color =
+SWITCH(
+    TRUE(),
+    [KPI6 Crecimiento Ciudad %] >= 10, "#27AE60",
+    [KPI6 Crecimiento Ciudad %] >= 0,  "#F39C12",
+    "#E74C3C"
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Ranking de ciudades por boletos
+
+KPI6 Ranking Ciudad =
+RANKX(
+    ALL(DIM_TEATRO[ciudad]),
+    [Total Boletos Vendidos],
+    ,
+    DESC,
+    DENSE
+)
+
+
+// =============================================================================
+// TARJETAS RESUMEN — para la página de portada del reporte
+// =============================================================================
+
+Resumen Ocupacion Prom % =
+AVERAGEX(
+    FACT_VENTAS_BOLETOS,
+    DIVIDE(FACT_VENTAS_BOLETOS[boletos_vendidos], RELATED(DIM_SALA[capacidad]), 0) * 100
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+Resumen Ingreso Total COP =
+SUM(FACT_VENTAS_BOLETOS[ingreso_total])
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+Resumen Total Funciones =
+COUNTROWS(FACT_VENTAS_BOLETOS)
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+Resumen Total Boletos =
+SUM(FACT_VENTAS_BOLETOS[boletos_vendidos])
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+Resumen Pelicula Top =
+FIRSTNONBLANK(
+    TOPN(
+        1,
+        VALUES(DIM_PELICULA[titulo]),
+        CALCULATE([Total Boletos Vendidos]),
+        DESC
+    ),
+    1
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+Resumen Ciudad Top =
+FIRSTNONBLANK(
+    TOPN(
+        1,
+        VALUES(DIM_TEATRO[ciudad]),
+        CALCULATE([Total Boletos Vendidos]),
+        DESC
+    ),
+    1
+)

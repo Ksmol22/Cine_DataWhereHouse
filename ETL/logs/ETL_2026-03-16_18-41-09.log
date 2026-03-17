@@ -1,0 +1,67 @@
+[2026-03-16 18:41:09] [INFO] [ETL_Pipeline] Logger inicializado. Archivo de log: c:\Users\kmolina\Documents\DataWhereHouse\ETL\logs\ETL_2026-03-16_18-41-09.log
+[2026-03-16 18:41:09] [INFO] [ETL_Pipeline] ======================================================================
+[2026-03-16 18:41:09] [INFO] [ETL_Pipeline]   INICIANDO PIPELINE ETL — DataWhereHouse
+[2026-03-16 18:41:09] [INFO] [ETL_Pipeline]   Fecha/Hora: 2026-03-16 18:41:09
+[2026-03-16 18:41:09] [INFO] [ETL_Pipeline] ======================================================================
+[2026-03-16 18:41:09] [DEBUG] [ETL_Pipeline] Directorio de datasets: c:\Users\kmolina\Documents\DataWhereHouse\Datasets
+[2026-03-16 18:41:09] [DEBUG] [ETL_Pipeline] Directorio de procesados: c:\Users\kmolina\Documents\DataWhereHouse\Datasets\procesados
+[2026-03-16 18:41:09] [INFO] [ETL_Pipeline] Conectando a MySQL...
+[2026-03-16 18:41:09] [DEBUG] [ETL_Pipeline]   Host: 127.0.0.1:3306 | Base de datos: cine | Usuario: root
+[2026-03-16 18:41:09] [DEBUG] [ETL_Pipeline]   Connection string (sin credenciales): Host=127.0.0.1:3306 | DB=cine | User=root | Password=***
+[2026-03-16 18:41:09] [ERROR] [ETL_Pipeline] Error al conectar a MySQL: No module named 'mysql'
+Traceback (most recent call last):
+  File "c:\Users\kmolina\Documents\DataWhereHouse\ETL\loader.py", line 75, in conectar
+    self._engine = create_engine(
+                   ~~~~~~~~~~~~~^
+        connection_string,
+        ^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        }
+        ^
+    )
+    ^
+  File "<string>", line 2, in create_engine
+  File "C:\Users\santi\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\util\deprecations.py", line 281, in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+  File "C:\Users\santi\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\create.py", line 617, in create_engine
+    dbapi = dbapi_meth(**dbapi_args)
+  File "C:\Users\santi\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\dialects\mysql\mysqlconnector.py", line 165, in import_dbapi
+    return cast("DBAPIModule", __import__("mysql.connector").connector)
+                               ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'mysql'
+[2026-03-16 18:41:09] [CRITICAL] [ETL_Pipeline] ERROR CRÍTICO INESPERADO: No module named 'mysql'
+Traceback (most recent call last):
+  File "c:\Users\kmolina\Documents\DataWhereHouse\ETL\etl_pipeline.py", line 60, in ejecutar_etl
+    with Loader(logger) as loader:
+         ~~~~~~^^^^^^^^
+  File "c:\Users\kmolina\Documents\DataWhereHouse\ETL\loader.py", line 40, in __enter__
+    self.conectar()
+    ~~~~~~~~~~~~~^^
+  File "c:\Users\kmolina\Documents\DataWhereHouse\ETL\loader.py", line 75, in conectar
+    self._engine = create_engine(
+                   ~~~~~~~~~~~~~^
+        connection_string,
+        ^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        }
+        ^
+    )
+    ^
+  File "<string>", line 2, in create_engine
+  File "C:\Users\santi\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\util\deprecations.py", line 281, in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+  File "C:\Users\santi\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\create.py", line 617, in create_engine
+    dbapi = dbapi_meth(**dbapi_args)
+  File "C:\Users\santi\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\dialects\mysql\mysqlconnector.py", line 165, in import_dbapi
+    return cast("DBAPIModule", __import__("mysql.connector").connector)
+                               ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'mysql'
+
+[2026-03-16 18:41:09] [INFO] [ETL_Pipeline] ======================================================================
+[2026-03-16 18:41:09] [INFO] [ETL_Pipeline]   RESUMEN FINAL — PIPELINE ETL
+[2026-03-16 18:41:09] [INFO] [ETL_Pipeline] ======================================================================
+[2026-03-16 18:41:09] [INFO] [ETL_Pipeline]   Archivos procesados exitosamente : 0
+[2026-03-16 18:41:09] [INFO] [ETL_Pipeline]   Archivos con errores             : 0
+[2026-03-16 18:41:09] [INFO] [ETL_Pipeline]   Total filas cargadas en SQL Server: 0
+[2026-03-16 18:41:09] [INFO] [ETL_Pipeline]   Duración total                   : 0m 0.12s
+[2026-03-16 18:41:09] [INFO] [ETL_Pipeline] ======================================================================

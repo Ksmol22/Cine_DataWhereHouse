@@ -1,0 +1,98 @@
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline] Logger inicializado. Archivo de log: c:\Users\kmolina\Documents\DataWhereHouse\ETL\logs\ETL_2026-03-16_18-51-06.log
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline] ======================================================================
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline]   INICIANDO PIPELINE ETL — DataWhereHouse
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline]   Fecha/Hora: 2026-03-16 18:51:06
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline] ======================================================================
+[2026-03-16 18:51:06] [DEBUG] [ETL_Pipeline] Directorio de datasets: c:\Users\kmolina\Documents\DataWhereHouse\Datasets
+[2026-03-16 18:51:06] [DEBUG] [ETL_Pipeline] Directorio de procesados: c:\Users\kmolina\Documents\DataWhereHouse\Datasets\procesados
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline] Conectando a MySQL...
+[2026-03-16 18:51:06] [DEBUG] [ETL_Pipeline]   Host: 127.0.0.1:3306 | Base de datos: cine | Usuario: root
+[2026-03-16 18:51:06] [DEBUG] [ETL_Pipeline]   Connection string (sin credenciales): Host=127.0.0.1:3306 | DB=cine | User=root | Password=***
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline] Conexión exitosa a MySQL: [127.0.0.1:3306] → [cine]
+[2026-03-16 18:51:06] [DEBUG] [ETL_Pipeline]   Detectado: dataset_limpio_50k_nl.xlsx
+[2026-03-16 18:51:06] [DEBUG] [ETL_Pipeline]   Detectado: dataset_sucio_20k_nl.xlsx
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline] Archivos a procesar: 2
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline] Extrayendo: dataset_limpio_50k_nl.xlsx
+[2026-03-16 18:51:06] [ERROR] [ETL_Pipeline] Error al extraer 'dataset_limpio_50k_nl.xlsx': Pandas requires version '3.1.5' or newer of 'openpyxl' (version '3.1.2' currently installed).
+Traceback (most recent call last):
+  File "c:\Users\kmolina\Documents\DataWhereHouse\ETL\extractor.py", line 92, in extraer_todos
+    df = self._leer_archivo(ruta_archivo, extension)
+  File "c:\Users\kmolina\Documents\DataWhereHouse\ETL\extractor.py", line 168, in _leer_archivo
+    return lectores[extension](ruta)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "c:\Users\kmolina\Documents\DataWhereHouse\ETL\extractor.py", line 191, in _leer_excel
+    df = pd.read_excel(
+        ruta,
+        sheet_name=0,    # Primera hoja
+        engine=None      # Pandas elige automáticamente openpyxl o xlrd
+    )
+  File "C:\Users\kmolina\Documents\DataWhereHouse\.venv\Lib\site-packages\pandas\io\excel\_base.py", line 481, in read_excel
+    io = ExcelFile(
+        io,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File "C:\Users\kmolina\Documents\DataWhereHouse\.venv\Lib\site-packages\pandas\io\excel\_base.py", line 1621, in __init__
+    self._reader = self._engines[engine](
+                   ~~~~~~~~~~~~~~~~~~~~~^
+        self._io,
+        ^^^^^^^^^
+        storage_options=storage_options,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        engine_kwargs=engine_kwargs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kmolina\Documents\DataWhereHouse\.venv\Lib\site-packages\pandas\io\excel\_openpyxl.py", line 559, in __init__
+    import_optional_dependency("openpyxl")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\kmolina\Documents\DataWhereHouse\.venv\Lib\site-packages\pandas\compat\_optional.py", line 187, in import_optional_dependency
+    raise ImportError(msg)
+ImportError: Pandas requires version '3.1.5' or newer of 'openpyxl' (version '3.1.2' currently installed).
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline] Extrayendo: dataset_sucio_20k_nl.xlsx
+[2026-03-16 18:51:06] [ERROR] [ETL_Pipeline] Error al extraer 'dataset_sucio_20k_nl.xlsx': Pandas requires version '3.1.5' or newer of 'openpyxl' (version '3.1.2' currently installed).
+Traceback (most recent call last):
+  File "c:\Users\kmolina\Documents\DataWhereHouse\ETL\extractor.py", line 92, in extraer_todos
+    df = self._leer_archivo(ruta_archivo, extension)
+  File "c:\Users\kmolina\Documents\DataWhereHouse\ETL\extractor.py", line 168, in _leer_archivo
+    return lectores[extension](ruta)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "c:\Users\kmolina\Documents\DataWhereHouse\ETL\extractor.py", line 191, in _leer_excel
+    df = pd.read_excel(
+        ruta,
+        sheet_name=0,    # Primera hoja
+        engine=None      # Pandas elige automáticamente openpyxl o xlrd
+    )
+  File "C:\Users\kmolina\Documents\DataWhereHouse\.venv\Lib\site-packages\pandas\io\excel\_base.py", line 481, in read_excel
+    io = ExcelFile(
+        io,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File "C:\Users\kmolina\Documents\DataWhereHouse\.venv\Lib\site-packages\pandas\io\excel\_base.py", line 1621, in __init__
+    self._reader = self._engines[engine](
+                   ~~~~~~~~~~~~~~~~~~~~~^
+        self._io,
+        ^^^^^^^^^
+        storage_options=storage_options,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        engine_kwargs=engine_kwargs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kmolina\Documents\DataWhereHouse\.venv\Lib\site-packages\pandas\io\excel\_openpyxl.py", line 559, in __init__
+    import_optional_dependency("openpyxl")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\kmolina\Documents\DataWhereHouse\.venv\Lib\site-packages\pandas\compat\_optional.py", line 187, in import_optional_dependency
+    raise ImportError(msg)
+ImportError: Pandas requires version '3.1.5' or newer of 'openpyxl' (version '3.1.2' currently installed).
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline] Conexión a MySQL cerrada correctamente.
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline] ======================================================================
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline]   RESUMEN FINAL — PIPELINE ETL
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline] ======================================================================
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline]   Archivos procesados exitosamente : 0
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline]   Archivos con errores             : 0
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline]   Total filas cargadas en SQL Server: 0
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline]   Duración total                   : 0m 0.34s
+[2026-03-16 18:51:06] [INFO] [ETL_Pipeline] ======================================================================
+[2026-03-16 18:51:06] [WARNING] [ETL_Pipeline] No se encontraron archivos para procesar en Datasets/.

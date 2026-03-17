@@ -1,0 +1,10 @@
+[2026-03-16 18:50:12] [INFO] [DW_Sync_Manual] Logger inicializado. Archivo de log: c:\Users\kmolina\Documents\DataWhereHouse\ETL\logs\ETL_2026-03-16_18-50-12.log
+[2026-03-16 18:50:12] [INFO] [DW_Sync_Manual] Conectando a MySQL...
+[2026-03-16 18:50:12] [DEBUG] [DW_Sync_Manual]   Host: 127.0.0.1:3306 | Base de datos: cine | Usuario: root
+[2026-03-16 18:50:12] [DEBUG] [DW_Sync_Manual]   Connection string (sin credenciales): Host=127.0.0.1:3306 | DB=cine | User=root | Password=***
+[2026-03-16 18:50:13] [INFO] [DW_Sync_Manual] Conexión exitosa a MySQL: [127.0.0.1:3306] → [cine]
+[2026-03-16 18:50:13] [INFO] [DW_Sync_Manual] Sincronizando DW desde staging: stg_dataset_limpio_50k_nl
+[2026-03-16 18:50:15] [INFO] [DW_Sync_Manual] Sincronización DW completada para staging: stg_dataset_limpio_50k_nl
+[2026-03-16 18:50:15] [INFO] [DW_Sync_Manual] Sincronizando DW desde staging: stg_dataset_sucio_20k_nl
+[2026-03-16 18:50:16] [INFO] [DW_Sync_Manual] Sincronización DW completada para staging: stg_dataset_sucio_20k_nl
+[2026-03-16 18:50:16] [INFO] [DW_Sync_Manual] Conexión a MySQL cerrada correctamente.

@@ -72,7 +72,7 @@ def ejecutar_etl() -> int:
             # Este enfoque es eficiente en memoria para datasets grandes.
             # =================================================================
 
-            for nombre_tabla, df_crudo in extractor.extraer_todos():
+            for nombre_tabla, df_crudo, ruta_archivo, nombre_archivo in extractor.extraer_todos():
 
                 logger.info("-" * 60)
                 logger.info(f"  PROCESANDO: {nombre_tabla}")
@@ -108,6 +108,9 @@ def ejecutar_etl() -> int:
                     filas = loader.cargar(df_limpio, nombre_tabla)
                     total_filas_cargadas += filas
                     archivos_procesados += 1
+
+                    # Mover el archivo a procesados solo si Transform + Load fueron exitosos
+                    extractor.marcar_como_procesado(ruta_archivo, nombre_archivo)
 
                 except Exception as error_archivo:
                     # Error en un archivo específico: se registra y se continúa
